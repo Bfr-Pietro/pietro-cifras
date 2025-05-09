@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cifra Club - Letras, Cifras e Tablaturas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        header {
+            background-color: #0a7ec2;
+            color: #fff;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .logo span {
+            color: #ffdb00;
+        }
+        
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 30px;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .search-bar button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a:hover {
+            color: #ffdb00;
+        }
+        
+        /* Secondary Navigation */
+        .secondary-nav {
+            background-color: #006bb3;
+            padding: 10px 0;
+        }
+        
+        .secondary-nav ul {
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+        }
+        
+        .secondary-nav li {
+            margin-right: 20px;
+            white-space: nowrap;
+        }
+        
+        .secondary-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .secondary-nav a:hover {
+            color: #ffdb00;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(to right, #0a7ec2, #00a1e0);
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            background-color: #ffdb00;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 30px 0;
+        }
+        
+        .section-title {
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        /* Top Songs */
+        .top-songs {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .songs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .song-card {
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            padding: 15px;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .song-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .song-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .artist-name {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Artists */
+        .top-artists {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .artists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .artist-card {
+            cursor: pointer;
+        }
+        
+        .artist-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+            background-color: #eee;
+        }
+        
+        .artist-card:hover .artist-name {
+            color: #0a7ec2;
+        }
+        
+        /* Features */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .feature-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .feature-icon {
+            font-size: 40px;
+            color: #0a7ec2;
+            margin-bottom: 15px;
+        }
+        
+        .feature-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .feature-desc {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 40px 0;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ffdb00;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .footer-links a:hover {
+            color: #ffdb00;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            text-align: center;
+            font-size: 14px;
+            color: #aaa;
+        }
+        /* Estilo para o logo como imagem */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 30px;
+    margin-right: 5px;
+}
+
+/* Estilos para o carrossel */
+.carousel {
+    position: relative;
+    max-width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-container {
+    display: flex;
+    transition: transform 0.4s ease;
+    height: 400px;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    position: relative;
+    display: none;
+}
+
+.carousel-slide.active {
+    display: block;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 15px;
+    text-align: left;
+}
+
+.carousel-caption h3 {
+    margin: 0 0 5px 0;
+    font-size: 22px;
+}
+
+.carousel-caption p {
+    margin: 0;
+    font-size: 16px;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+.carousel-dots {
+    position: absolute;
+    bottom: 80px;
+    right: 15px;
+    display: flex;
+    z-index: 10;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.dot.active {
+    background: #ffdb00;
+}
+
+/* Estilos para a seção de ferramentas */
+.tools {
+    margin: 30px 0;
+    padding: 30px 0;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.tool-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.tool-icon {
+    font-size: 36px;
+    margin-bottom: 15px;
+    color: #0a7ec2;
+}
+
+.tool-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.tool-desc {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.tool-btn {
+    display: inline-block;
+    background-color: #0a7ec2;
+    color: #fff;
+    padding: 8px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.tool-btn:hover {
+    background-color: #006bb3;
+}
+
+@media (max-width: 768px) {
+    .carousel {
+        height: 300px;
+    }
+    
+    .carousel-caption h3 {
+        font-size: 18px;
+    }
+    
+    .carousel-caption p {
+        font-size: 14px;
+    }
+    
+    .carousel-dots {
+        bottom: 70px;
+    }
+}
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-bar {
+                margin: 10px 0;
+                width: 100%;
+            }
+            
+            .nav-links {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-links li {
+                margin-left: 0;
+            }
+            
+            .hero h1 {
+                font-size: 24px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Cifra<span>Club</span></div>
+            <div class="search-bar">
+                <input type="text" placeholder="Busque por artistas, músicas ou acordes...">
+                <button>🔍</button>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#">Entrar</a></li>
+                <li><a href="#">Cadastre-se</a></li>
+                <li><a href="#">PRO</a></li>
+            </ul>
+        </div>
+    </header>
+    
+    <!-- Secondary Navigation -->
+    <nav class="secondary-nav">
+        <div class="container">
+            <ul>
+                <li><a href="#">Cifras</a></li>
+                <li><a href="#">Videoaulas</a></li>
+                <li><a href="#">Artistas</a></li>
+                <li><a href="#">Afinador</a></li>
+                <li><a href="#">Dicionário</a></li>
+                <li><a href="#">Escalas</a></li>
+                <li><a href="#">Capotraste</a></li>
+                <li><a href="#">Aprenda</a></li>
+                <li><a href="#">Mais</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Substituição para a seção hero com carrossel -->
+<section class="hero">
+    <div class="container">
+        <div class="carousel">
+            <div class="carousel-container">
+                <div class="carousel-slide active">
+                    <img src="assets/imgs/evidencias.jpeg" alt="Evidências - Chitãozinho & Xororó" class="carousel-image">
+                    <div class="carousel-caption">
+                        <h3>Evidências</h3>
+                        <p>Chitãozinho & Xororó</p>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="assets/imgs/elapartiu.jpg" alt="Ela Partiu - Tim Maia" class="carousel-image">
+                    <div class="carousel-caption">
+                        <h3>Ela Partiu</h3>
+                        <p>Tim Maia</p>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="assets/imgs/diasdeluta.jpg" alt="Dias de Luta, Dias de Glória - Charlie Brown Jr." class="carousel-image">
+                    <div class="carousel-caption">
+                        <h3>Dias de Luta, Dias de Glória</h3>
+                        <p>Charlie Brown Jr.</p>
+                    </div>
+                </div>
+                <div class="carousel-slide">
+                    <img src="assets/imgs/trembala.jpg" alt="Trem-Bala - Ana Vilela" class="carousel-image">
+                    <div class="carousel-caption">
+                        <h3>Trem-Bala</h3>
+                        <p>Ana Vilela</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-btn prev">❮</button>
+            <button class="carousel-btn next">❯</button>
+            <div class="carousel-dots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+                <span class="dot" data-index="3"></span>
+            </div>
+        </div>
+    </div>
+</section>
+    
+    <!-- Main Content -->
+    <main class="main-content container">
+        <!-- Top Songs -->
+        <section class="top-songs">
+            <h2 class="section-title">Mais acessadas</h2>
+            <div class="songs-grid">
+                <div class="song-card">
+                    <div class="song-title">Evidências</div>
+                    <div class="artist-name">Chitãozinho & Xororó</div>
+                </div>
+                <div class="song-card">
+                    <div class="song-title">Ela Partiu</div>
+                    <div class="artist-name">Tim Maia</div>
+                </div>
+                <div class="song-card">
+                    <div class="song-title">Dias de Luta, Dias de Glória</div>
+                    <div class="artist-name">Charlie Brown Jr.</div>
+                </div>
+                <div class="song-card">
+                    <div class="song-title">Trem-Bala</div>
+                    <div class="artist-name">Ana Vilela</div>
+                </div>
+                <div class="song-card">
+                    <div class="song-title">Anunciação</div>
+                    <div class="artist-name">Alceu Valença</div>
+                </div>
+                <div class="song-card">
+                    <div class="song-title">Borbulhas de Amor</div>
+                    <div class="artist-name">Fagner</div>
+                </div>
+                <div class="song-card">
+                    <div class="song-title">Sozinho</div>
+                    <div class="artist-name">Caetano Veloso</div>
+                </div>
+                <div class="song-card">
+                    <div class="song-title">Garota de Ipanema</div>
+                    <div class="artist-name">Tom Jobim</div>
+                </div>
+            </div>
+            <div class="view-all-container" style="margin-top: 20px; text-align: right;">
+                <a href="todas-cifras.html" class="btn" style="background-color: #0a7ec2; color: white;">Ver todas as cifras</a>
+            </div>
+        </section>
+        
+        <!-- Top Artists -->
+        <section class="top-artists">
+            <h2 class="section-title">Artistas populares</h2>
+            <div class="artists-grid">
+                <div class="artist-card">
+                    <div class="artist-image"></div>
+                    <div class="artist-name">Marília Mendonça</div>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-image"></div>
+                    <div class="artist-name">Legião Urbana</div>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-image"></div>
+                    <div class="artist-name">Jorge & Mateus</div>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-image"></div>
+                    <div class="artist-name">Henrique & Juliano</div>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-image"></div>
+                    <div class="artist-name">Anavitória</div>
+                </div>
+                <div class="artist-card">
+                    <div class="artist-image"></div>
+                    <div class="artist-name">Tião Carreiro & Pardinho</div>
+                </div>
+            </div>
+            <div class="view-all-container" style="margin-top: 20px; text-align: right;">
+                <a href="todos-artistas.html" class="btn" style="background-color: #0a7ec2; color: white;">Ver todos os artistas</a>
+            </div>
+        </section>
+        
+        <section class="tools">
+    <h2 class="section-title">Ferramentas para músicos</h2>
+    <div class="tools-grid">
+        <div class="tool-card" id="tuner">
+            <div class="tool-icon">🎵</div>
+            <h3 class="tool-title">Afinador Online</h3>
+            <p class="tool-desc">Afine seu instrumento com precisão utilizando nosso afinador online.</p>
+            <a href="afinador.html" class="tool-btn">Abrir</a>
+        </div>
+        <div class="tool-card" id="chord-dictionary">
+            <div class="tool-icon">🎸</div>
+            <h3 class="tool-title">Dicionário de Acordes</h3>
+            <p class="tool-desc">Consulte todos os acordes para violão, guitarra, teclado e outros instrumentos.</p>
+            <a href="#" class="tool-btn">Consultar</a>
+        </div>
+        <div class="tool-card" id="scales">
+            <div class="tool-icon">📊</div>
+            <h3 class="tool-title">Escalas Musicais</h3>
+            <p class="tool-desc">Aprenda as principais escalas musicais e suas aplicações.</p>
+            <a href="#" class="tool-btn">Explorar</a>
+        </div>
+        <div class="tool-card" id="metronome">
+            <div class="tool-icon">⏱️</div>
+            <h3 class="tool-title">Metrônomo</h3>
+            <p class="tool-desc">Mantenha o ritmo perfeito com nosso metrônomo online.</p>
+            <a href="#" class="tool-btn">Iniciar</a>
+        </div>
+    </div>
+</section>
+        
+        
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Cifra Club</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Sobre nós</a></li>
+                        <li><a href="#">Vagas</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">Imprensa</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Serviços</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Cifra Club PRO</a></li>
+                        <li><a href="#">Academia de Música</a></li>
+                        <li><a href="#">Loja</a></li>
+                        <li><a href="#">Palco MP3</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Ferramentas</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Afinador</a></li>
+                        <li><a href="#">Dicionário de Acordes</a></li>
+                        <li><a href="#">Escalas</a></li>
+                        <li><a href="#">Capotraste</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Redes Sociais</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">YouTube</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2025 Cifra Club. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+    // Script do carrossel
+document.addEventListener('DOMContentLoaded', function() {
+    // Carrossel
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.querySelector('.carousel-btn.prev');
+    const nextBtn = document.querySelector('.carousel-btn.next');
+    let currentIndex = 0;
+    
+    function showSlide(index) {
+        // Esconder todos os slides
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+        
+        // Desativar todos os dots
+        dots.forEach(dot => {
+            dot.classList.remove('active');
+        });
+        
+        // Mostrar slide atual
+        slides[index].classList.add('active');
+        dots[index].classList.add('active');
+        currentIndex = index;
+    }
+    
+    // Próximo slide
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % slides.length;
+        showSlide(currentIndex);
+    }
+    
+    // Slide anterior
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        showSlide(currentIndex);
+    }
+    
+    // Configurar event listeners
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    
+    // Dots do carrossel
+    dots.forEach(dot => {
+        dot.addEventListener('click', function() {
+            const slideIndex = parseInt(this.getAttribute('data-index'));
+            showSlide(slideIndex);
+        });
+    });
+    
+    // Autoplay do carrossel
+    let interval = setInterval(nextSlide, 5000);
+    
+    // Pausar autoplay quando o mouse estiver sobre o carrossel
+    const carousel = document.querySelector('.carousel');
+    carousel.addEventListener('mouseenter', () => {
+        clearInterval(interval);
+    });
+    
+    carousel.addEventListener('mouseleave', () => {
+        interval = setInterval(nextSlide, 5000);
+    });
+    
+    // Tornar os slides do carrossel clicáveis com redirecionamento
+    slides.forEach((slide, index) => {
+        slide.addEventListener('click', function() {
+            const songTitle = this.querySelector('.carousel-caption h3').textContent;
+            const artistName = this.querySelector('.carousel-caption p').textContent;
+            // Criar URL amigável
+            const url = 'cifra-' + songTitle.toLowerCase().replace(/ /g, '-') + '.html';
+            // Redirecionar para a página da cifra
+            window.location.href = url;
+        });
+    });
+    
+    // Base de dados fictícia para pesquisa
+    const database = {
+        songs: [
+            { title: "Evidências", artist: "Chitãozinho & Xororó", type: "sertanejo" },
+            { title: "Ela Partiu", artist: "Tim Maia", type: "mpb" },
+            { title: "Dias de Luta, Dias de Glória", artist: "Charlie Brown Jr.", type: "rock" },
+            { title: "Trem-Bala", artist: "Ana Vilela", type: "pop" },
+            { title: "Anunciação", artist: "Alceu Valença", type: "mpb" },
+            { title: "Borbulhas de Amor", artist: "Fagner", type: "mpb" },
+            { title: "Sozinho", artist: "Caetano Veloso", type: "mpb" },
+            { title: "Garota de Ipanema", artist: "Tom Jobim", type: "bossa nova" },
+            { title: "Tempo Perdido", artist: "Legião Urbana", type: "rock" },
+            { title: "Pais e Filhos", artist: "Legião Urbana", type: "rock" },
+            { title: "Que País É Este", artist: "Legião Urbana", type: "rock" },
+            { title: "Ainda Gosto Dela", artist: "Skank", type: "rock" },
+            { title: "Cheia de Manias", artist: "Raça Negra", type: "pagode" },
+            { title: "Fim de Tarde", artist: "Tião Carreiro & Pardinho", type: "sertanejo" },
+            { title: "Sinônimos", artist: "Chitãozinho & Xororó", type: "sertanejo" },
+            { title: "Flor e o Beija-flor", artist: "Henrique & Juliano", type: "sertanejo" },
+            { title: "Infiel", artist: "Marília Mendonça", type: "sertanejo" },
+            { title: "Trevo (Tu)", artist: "Anavitória", type: "mpb" }
+        ],
+        artists: [
+            { name: "Marília Mendonça", type: "sertanejo" },
+            { name: "Legião Urbana", type: "rock" },
+            { name: "Jorge & Mateus", type: "sertanejo" },
+            { name: "Henrique & Juliano", type: "sertanejo" },
+            { name: "Anavitória", type: "mpb" },
+            { name: "Tião Carreiro & Pardinho", type: "sertanejo" },
+            { name: "Chitãozinho & Xororó", type: "sertanejo" },
+            { name: "Tim Maia", type: "mpb" },
+            { name: "Charlie Brown Jr.", type: "rock" },
+            { name: "Ana Vilela", type: "pop" },
+            { name: "Alceu Valença", type: "mpb" },
+            { name: "Fagner", type: "mpb" },
+            { name: "Caetano Veloso", type: "mpb" },
+            { name: "Tom Jobim", type: "bossa nova" },
+            { name: "Skank", type: "rock" },
+            { name: "Raça Negra", type: "pagode" }
+        ]
+    };
+
+    // Elementos DOM
+    const mainContent = document.querySelector('.main-content');
+    const searchInput = document.querySelector('.search-bar input');
+    const searchButton = document.querySelector('.search-bar button');
+    const originalContent = mainContent.innerHTML;
+    
+    // Criar elemento de resultados da pesquisa
+    const searchResults = document.createElement('div');
+    searchResults.className = 'search-results';
+    searchResults.style.display = 'none';
+    mainContent.appendChild(searchResults);
+    
+    // Estilizar os resultados da pesquisa
+    searchResults.style.backgroundColor = '#fff';
+    searchResults.style.borderRadius = '8px';
+    searchResults.style.padding = '20px';
+    searchResults.style.margin = '20px 0';
+    searchResults.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.05)';
+    
+    // Função para realizar a pesquisa
+    function performSearch() {
+        const query = searchInput.value.trim().toLowerCase();
+        
+        if (query === '') {
+            searchResults.style.display = 'none';
+            mainContent.innerHTML = originalContent;
+            setupEventListeners(); // Reconfigurar event listeners
+            return;
+        }
+        
+        // Filtrar músicas e artistas baseado na query
+        const filteredSongs = database.songs.filter(song => 
+            song.title.toLowerCase().includes(query) || 
+            song.artist.toLowerCase().includes(query) ||
+            song.type.toLowerCase().includes(query)
+        );
+        
+        const filteredArtists = database.artists.filter(artist => 
+            artist.name.toLowerCase().includes(query) ||
+            artist.type.toLowerCase().includes(query)
+        );
+        
+        // Exibir resultados
+        displaySearchResults(query, filteredSongs, filteredArtists);
+    }
+    
+    // Função para exibir os resultados
+    function displaySearchResults(query, songs, artists) {
+        // Limpar conteúdo principal e exibir resultados
+        mainContent.innerHTML = '';
+        mainContent.appendChild(searchResults);
+        searchResults.style.display = 'block';
+        
+        // Template de resultados
+        searchResults.innerHTML = `
+            <div class="search-header">
+                <h2 class="section-title">Resultados para: "${query}"</h2>
+                <a href="index.html" class="btn" style="background: #0a7ec2; color: white; text-decoration: none; 
+                    padding: 8px 15px; border-radius: 4px; display: inline-block; margin-bottom: 20px;">
+                    Voltar à página inicial
+                </a>
+            </div>
+            
+            <h3 style="margin-bottom: 15px; font-size: 18px;">Músicas (${songs.length})</h3>
+            <div class="songs-results" style="margin-bottom: 30px;">
+                ${songs.length > 0 ? 
+                    `<div class="songs-grid">
+                        ${songs.map(song => `
+                            <div class="song-card" onclick="window.location.href='cifra-${song.title.toLowerCase().replace(/ /g, '-')}.html'">
+                                <div class="song-title">${song.title}</div>
+                                <div class="artist-name">${song.artist}</div>
+                                <div style="font-size: 12px; color: #888; margin-top: 5px;">${song.type}</div>
+                            </div>
+                        `).join('')}
+                    </div>` : 
+                    '<p>Nenhuma música encontrada.</p>'
+                }
+            </div>
+            
+            <h3 style="margin-bottom: 15px; font-size: 18px;">Artistas (${artists.length})</h3>
+            <div class="artists-results">
+                ${artists.length > 0 ? 
+                    `<div class="artists-grid">
+                        ${artists.map(artist => `
+                            <div class="artist-card" onclick="window.location.href='artista-${artist.name.toLowerCase().replace(/ /g, '-').replace(/&/g, 'e')}.html'">
+                                <div class="artist-image"></div>
+                                <div class="artist-name">${artist.name}</div>
+                                <div style="font-size: 12px; color: #888;">${artist.type}</div>
+                            </div>
+                        `).join('')}
+                    </div>` : 
+                    '<p>Nenhum artista encontrado.</p>'
+                }
+            </div>
+        `;
+        
+        // Configurar cards clicáveis nos resultados (caso o onclick inline não funcione)
+        setupSearchResultsEventListeners();
+    }
+    
+    // Função para configurar event listeners para os resultados
+    function setupSearchResultsEventListeners() {
+        // Configurar cards de músicas nos resultados de pesquisa
+        const songResultCards = document.querySelectorAll('.songs-results .song-card');
+        songResultCards.forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function() {
+                const songTitle = this.querySelector('.song-title').textContent;
+                const artistName = this.querySelector('.artist-name').textContent;
+                // Criar URL amigável
+                const url = 'cifra-' + songTitle.toLowerCase().replace(/ /g, '-') + '.html';
+                // Redirecionar para a página da cifra
+                window.location.href = url;
+            });
+        });
+        
+        // Configurar cards de artistas nos resultados de pesquisa
+        const artistResultCards = document.querySelectorAll('.artists-results .artist-card');
+        artistResultCards.forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function() {
+                const artistName = this.querySelector('.artist-name').textContent;
+                // Criar URL amigável
+                const url = 'artista-' + artistName.toLowerCase().replace(/ /g, '-').replace(/&/g, 'e') + '.html';
+                // Redirecionar para a página do artista
+                window.location.href = url;
+            });
+        });
+    }
+    
+    // Configurar event listeners para a página inicial
+    function setupEventListeners() {
+        // Event listeners para pesquisa
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        // Event listeners para cards de músicas
+        const songCards = document.querySelectorAll('.song-card');
+        songCards.forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function() {
+                const songTitle = this.querySelector('.song-title').textContent;
+                const artistName = this.querySelector('.artist-name').textContent;
+                // Criar URL amigável
+                const url = 'cifra-' + songTitle.toLowerCase().replace(/ /g, '-') + '.html';
+                // Redirecionar para a página da cifra
+                window.location.href = url;
+            });
+        });
+        
+        // Event listeners para cards de artistas
+        const artistCards = document.querySelectorAll('.artist-card');
+        artistCards.forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function() {
+                const artistName = this.querySelector('.artist-name').textContent;
+                // Criar URL amigável
+                const url = 'artista-' + artistName.toLowerCase().replace(/ /g, '-').replace(/&/g, 'e') + '.html';
+                // Redirecionar para a página do artista
+                window.location.href = url;
+            });
+        });
+    }
+    
+    // Inicializar event listeners
+    setupEventListeners();
+});
+    </script>
+</body>
+</html>

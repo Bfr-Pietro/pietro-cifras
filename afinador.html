@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afinador Online - Cifra Club</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header */
+        header {
+            background-color: #0a7ec2;
+            color: #fff;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #fff;
+        }
+        
+        .logo span {
+            color: #ffdb00;
+        }
+        
+        .search-bar {
+            flex-grow: 1;
+            margin: 0 30px;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .search-bar button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 20px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a:hover {
+            color: #ffdb00;
+        }
+        
+        /* Secondary Navigation */
+        .secondary-nav {
+            background-color: #006bb3;
+            padding: 10px 0;
+        }
+        
+        .secondary-nav ul {
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+        }
+        
+        .secondary-nav li {
+            margin-right: 20px;
+            white-space: nowrap;
+        }
+        
+        .secondary-nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .secondary-nav a:hover {
+            color: #ffdb00;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 30px 0;
+            min-height: calc(100vh - 248px);
+        }
+        
+        .tool-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .tool-header h1 {
+            font-size: 32px;
+            color: #0a7ec2;
+            margin-bottom: 15px;
+        }
+        
+        .tool-header p {
+            font-size: 16px;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Afinador */
+        .tuner-container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tuner-display {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .note-display {
+            font-size: 72px;
+            font-weight: bold;
+            color: #0a7ec2;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .frequency-display {
+            font-size: 24px;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .tuning-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            margin: 20px 0;
+        }
+        
+        .indicator-bar {
+            width: 300px;
+            height: 10px;
+            background-color: #eee;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .indicator-needle {
+            width: 4px;
+            height: 20px;
+            background-color: #0a7ec2;
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: left 0.2s;
+        }
+        
+        .tuning-status {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #666;
+            height: 20px;
+        }
+        
+        .tuner-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .start-btn {
+            background-color: #0a7ec2;
+            color: #fff;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 20px;
+        }
+        
+        .start-btn:hover {
+            background-color: #006bb3;
+        }
+        
+        .string-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .string-btn {
+            background-color: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            margin: 0 10px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .string-btn.active {
+            background-color: #ffdb00;
+            border-color: #ffdb00;
+            color: #333;
+        }
+        
+        .string-btn:hover {
+            border-color: #0a7ec2;
+        }
+        
+        .instrument-select {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .instrument-select select {
+            padding: 8px 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            background-color: #fff;
+        }
+        
+        .accuracy-meter {
+            width: 100%;
+            height: 30px;
+            background-color: #eee;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .accuracy-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(to right, #ff4d4d, #ffcc00, #4CAF50);
+            transition: width 0.3s;
+        }
+        
+        .instructions {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .instructions h3 {
+            margin-bottom: 15px;
+            color: #0a7ec2;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .permissions-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 40px 0;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #ffdb00;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .footer-links a:hover {
+            color: #ffdb00;
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            text-align: center;
+            font-size: 14px;
+            color: #aaa;
+        }
+    .indicator-needle {
+    width: 4px;
+    height: 20px;
+    background-color: #0a7ec2;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: left 0.2s, background-color 0.2s;
+}
+
+.indicator-needle.tuned {
+    background-color: #4CAF50; /* Verde */
+}
+
+.indicator-needle.too-low {
+    background-color: #FF9800; /* Laranja */
+}
+
+.indicator-needle.too-high {
+    background-color: #ff4d4d; /* Vermelho */
+}
+*/
+
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-bar {
+                margin: 10px 0;
+                width: 100%;
+            }
+            
+            .nav-links {
+                margin-top: 10px;
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .nav-links li {
+                margin-left: 0;
+            }
+            
+            .tuner-container {
+                padding: 20px;
+            }
+            
+            .note-display {
+                font-size: 60px;
+            }
+            
+            .string-buttons {
+                margin-top: 10px;
+            }
+            
+            .string-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 16px;
+                margin: 0 5px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="index.html" class="logo">Cifra<span>Club</span></a>
+            <ul class="nav-links">
+                <li><a href="#">Entrar</a></li>
+                <li><a href="#">Cadastre-se</a></li>
+                <li><a href="#">PRO</a></li>
+            </ul>
+        </div>
+    </header>
+    
+    <!-- Secondary Navigation -->
+    <nav class="secondary-nav">
+        <div class="container">
+            <ul>
+                <li><a href="#">Cifras</a></li>
+                <li><a href="#">Videoaulas</a></li>
+                <li><a href="#">Artistas</a></li>
+                <li><a href="afinador.html">Afinador</a></li>
+                <li><a href="dicionario.html">Dicionário</a></li>
+                <li><a href="escalas.html">Escalas</a></li>
+                <li><a href="#">Capotraste</a></li>
+                <li><a href="#">Aprenda</a></li>
+                <li><a href="#">Mais</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="main-content container">
+        <section class="tool-header">
+            <h1>Afinador Online</h1>
+            <p>Afine seu instrumento com precisão utilizando nosso afinador online gratuito. 
+               Detectamos automaticamente as notas tocadas e ajudamos você a conseguir a afinação perfeita.</p>
+        </section>
+        
+        <section class="tuner-container">
+            <div class="tuner-display">
+                <div class="note-display">-</div>
+                <div class="frequency-display">0 Hz</div>
+            </div>
+            
+            <div class="tuning-indicator">
+                <div class="indicator-bar">
+                    <div class="indicator-needle"></div>
+                </div>
+            </div>
+            
+            <div class="tuning-status" id="tuning-status">Aguardando...</div>
+            
+            <div class="instrument-select">
+                <select id="instrument-select">
+                    <option value="guitar">Violão/Guitarra (E A D G B E)</option>
+                    <option value="bass">Baixo (E A D G)</option>
+                    <option value="ukulele">Ukulele (G C E A)</option>
+                    <option value="violin">Violino (G D A E)</option>
+                </select>
+            </div>
+            
+            <div class="string-buttons" id="string-buttons">
+                <button class="string-btn" data-note="E" data-freq="82.41">E</button>
+                <button class="string-btn" data-note="A" data-freq="110.00">A</button>
+                <button class="string-btn" data-note="D" data-freq="146.83">D</button>
+                <button class="string-btn" data-note="G" data-freq="196.00">G</button>
+                <button class="string-btn" data-note="B" data-freq="246.94">B</button>
+                <button class="string-btn" data-note="E" data-freq="329.63">E</button>
+            </div>
+            
+            <div class="tuner-controls">
+                <button class="start-btn" id="start-btn">Iniciar Afinador</button>
+                <div class="permissions-warning" id="permissions-warning">
+                    Por favor, permita o acesso ao microfone para usar o afinador.
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>Como afinar seu instrumento:</h3>
+                <ol>
+                    <li>Selecione seu instrumento no menu dropdown acima.</li>
+                    <li>Clique em "Iniciar Afinador" e permita o acesso ao microfone.</li>
+                    <li>Toque uma corda do seu instrumento.</li>
+                    <li>Observe a nota detectada no display e ajuste a tensão da corda até que a agulha esteja centralizada e a nota correta seja exibida.</li>
+                    <li>Você também pode clicar em uma das notas abaixo para ouvir como a corda deve soar.</li>
+                </ol>
+                <p><strong>Dica:</strong> Para melhores resultados, use o afinador em um ambiente silencioso e posicione o microfone próximo ao instrumento.</p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Cifra Club</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Sobre nós</a></li>
+                        <li><a href="#">Vagas</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">Imprensa</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Serviços</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Cifra Club PRO</a></li>
+                        <li><a href="#">Academia de Música</a></li>
+                        <li><a href="#">Loja</a></li>
+                        <li><a href="#">Palco MP3</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Ferramentas</h3>
+                    <ul class="footer-links">
+                        <li><a href="afinador.html">Afinador</a></li>
+                        <li><a href="dicionario.html">Dicionário de Acordes</a></li>
+                        <li><a href="escalas.html">Escalas</a></li>
+                        <li><a href="#">Capotraste</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Redes Sociais</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">YouTube</a></li>
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Twitter</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                © 2025 Cifra Club. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Elementos DOM
+    const startButton = document.getElementById('start-btn');
+    const noteDisplay = document.querySelector('.note-display');
+    const frequencyDisplay = document.querySelector('.frequency-display');
+    const indicatorNeedle = document.querySelector('.indicator-needle');
+    const tuningStatus = document.getElementById('tuning-status');
+    const permissionsWarning = document.getElementById('permissions-warning');
+    const instrumentSelect = document.getElementById('instrument-select');
+    const stringButtons = document.querySelectorAll('.string-btn');
+    let lastStatusUpdateTime = 0;
+let lastStatusMessage = '';
+let lastNeedleColor = '';
+let statusUpdateDelay = 2000; // 2 segundo de delay antes de atualizar novamente
+    
+    // Variáveis para o afinador
+    let audioContext;
+    let analyser;
+    let microphone;
+    let isListening = false;
+    let animationFrame;
+    
+    // Notas e frequências
+    const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    const A4_FREQ = 440;
+    const A4_INDEX = 69; // MIDI note number for A4
+    
+    // Afinações para diferentes instrumentos
+    const tunings = {
+        guitar: [
+            { note: 'E', freq: 82.41 },
+            { note: 'A', freq: 110.00 },
+            { note: 'D', freq: 146.83 },
+            { note: 'G', freq: 196.00 },
+            { note: 'B', freq: 246.94 },
+            { note: 'E', freq: 329.63 }
+        ],
+        bass: [
+            { note: 'E', freq: 41.20 },
+            { note: 'A', freq: 55.00 },
+            { note: 'D', freq: 73.42 },
+            { note: 'G', freq: 98.00 }
+        ],
+        ukulele: [
+            { note: 'G', freq: 392.00 },
+            { note: 'C', freq: 261.63 },
+            { note: 'E', freq: 329.63 },
+            { note: 'A', freq: 440.00 }
+        ],
+        violin: [
+            { note: 'G', freq: 196.00 },
+            { note: 'D', freq: 293.66 },
+            { note: 'A', freq: 440.00 },
+            { note: 'E', freq: 659.25 }
+        ]
+    };
+    
+    // Atualizar os botões de cordas quando o instrumento é alterado
+    instrumentSelect.addEventListener('change', updateStringButtons);
+    
+    function updateStringButtons() {
+        const instrumentType = instrumentSelect.value;
+        const stringButtonsContainer = document.getElementById('string-buttons');
+        
+        // Limpar botões existentes
+        stringButtonsContainer.innerHTML = '';
+        
+        // Adicionar novos botões baseados no instrumento selecionado
+        tunings[instrumentType].forEach(string => {
+            const button = document.createElement('button');
+            button.className = 'string-btn';
+            button.setAttribute('data-note', string.note);
+            button.setAttribute('data-freq', string.freq);
+            button.textContent = string.note;
+            button.addEventListener('click', () => playReferenceNote(string.freq));
+            stringButtonsContainer.appendChild(button);
+        });
+    }
+    
+    // Reproduzir uma nota de referência
+    function playReferenceNote(frequency) {
+        // Criar contexto de áudio se não existir
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        // Criar oscilador
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        // Configurar oscilador
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+        
+        // Configurar envelope de amplitude
+        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.05);
+        gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1.5);
+        
+        // Conectar nós
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // Iniciar e parar o oscilador
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 1.5);
+    }
+    
+    // Converter frequência para nota
+    function getNote(frequency) {
+        // Converter frequência para número de nota MIDI
+        const noteNum = 12 * (Math.log(frequency / A4_FREQ) / Math.log(2)) + A4_INDEX;
+        
+        // Calcular a nota mais próxima e a diferença em cents
+        const roundedNoteNum = Math.round(noteNum);
+        const cents = Math.round((noteNum - roundedNoteNum) * 100);
+        
+        // Obter o nome da nota
+        const noteName = NOTES[roundedNoteNum % 12];
+        const octave = Math.floor(roundedNoteNum / 12) - 1;
+        
+        return {
+            name: noteName,
+            octave: octave,
+            frequency: frequency,
+            cents: cents
+        };
+    }
+    
+    // Iniciar/parar o afinador
+    startButton.addEventListener('click', toggleTuner);
+    
+    function toggleTuner() {
+        if (isListening) {
+            stopListening();
+            startButton.textContent = 'Iniciar Afinador';
+        } else {
+            startListening();
+            startButton.textContent = 'Parar Afinador';
+        }
+    }
+    
+    // Iniciar a escuta do microfone
+    function startListening() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                microphone = audioContext.createMediaStreamSource(stream);
+                analyser = audioContext.createAnalyser();
+                
+                // Configurar analisador
+                analyser.fftSize = 2048;
+                analyser.smoothingTimeConstant = 0.8;
+                microphone.connect(analyser);
+                
+                // Atualizar UI
+                isListening = true;
+                permissionsWarning.style.display = 'none';
+                
+                // Iniciar loop de análise
+                updatePitch();
+            })
+            .catch(err => {
+                console.error('Erro ao acessar o microfone:', err);
+                permissionsWarning.style.display = 'block';
+            });
+    }
+    
+    // Parar a escuta do microfone
+    function stopListening() {
+        if (microphone) {
+            microphone.disconnect();
+            microphone = null;
+        }
+        
+        if (animationFrame) {
+            cancelAnimationFrame(animationFrame);
+        }
+        
+        isListening = false;
+        noteDisplay.textContent = '-';
+        frequencyDisplay.textContent = '0 Hz';
+        indicatorNeedle.style.left = '50%';
+        tuningStatus.textContent = 'Aguardando...';
+    }
+    
+    // Atualizar a detecção de pitch em tempo real
+    function updatePitch() {
+    const bufferLength = analyser.fftSize;
+    const buffer = new Float32Array(bufferLength);
+    analyser.getFloatTimeDomainData(buffer);
+    
+    // Usar algoritmo de autocorrelação para detectar a frequência fundamental
+    const frequency = detectPitch(buffer, audioContext.sampleRate);
+    
+    // Sempre mostrar a frequência detectada, mesmo que não seja próxima a nenhuma corda específica
+    if (frequency && frequency > 20 && frequency < 2000) {
+        const note = getNote(frequency);
+        
+        // Atualizar display de frequência e nota sempre
+        noteDisplay.textContent = note.name;
+        frequencyDisplay.textContent = `${frequency.toFixed(1)} Hz`;
+        
+        // Verificar se está próximo de alguma nota de afinação
+        const currentInstrument = instrumentSelect.value;
+        const closestString = findClosestString(frequency, tunings[currentInstrument]);
+        
+        if (closestString) {
+            // Calcular quão perto está da afinação correta
+            const targetFreq = closestString.freq;
+            const centsOff = 1200 * Math.log2(frequency / targetFreq);
+            
+            // Posicionar a agulha (limitando a +/- 50 cents)
+            const needlePosition = Math.min(Math.max((centsOff + 50) / 100, 0), 1) * 100;
+            indicatorNeedle.style.left = `${needlePosition}%`;
+            
+            // Preparar nova mensagem de status e cor
+            let newStatusMessage = '';
+            let newNeedleColor = '';
+            
+            if (Math.abs(centsOff) < 5) {
+                newStatusMessage = `Afinado! (${closestString.note})`;
+                newNeedleColor = '#4CAF50'; // Verde
+            } else if (centsOff < 0) {
+                newStatusMessage = `Aperte mais a corda (${closestString.note})`;
+                newNeedleColor = '#FF9800'; // Laranja
+            } else {
+                newStatusMessage = `Solte mais a corda (${closestString.note})`;
+                newNeedleColor = '#ff4d4d'; // Vermelho
+            }
+            
+            // Verificar se devemos atualizar a mensagem de status
+            const currentTime = Date.now();
+            if (
+                newStatusMessage !== lastStatusMessage || 
+                currentTime - lastStatusUpdateTime > statusUpdateDelay
+            ) {
+                // Atualizar a mensagem e o timestamp
+                tuningStatus.textContent = newStatusMessage;
+                tuningStatus.style.color = newNeedleColor;
+                indicatorNeedle.style.backgroundColor = newNeedleColor;
+                
+                lastStatusMessage = newStatusMessage;
+                lastNeedleColor = newNeedleColor;
+                lastStatusUpdateTime = currentTime;
+            } else {
+                // Usar a última cor para a agulha, mas não atualizar o texto
+                indicatorNeedle.style.backgroundColor = lastNeedleColor;
+            }
+            
+            // Destacar o botão da corda correspondente
+            document.querySelectorAll('.string-btn').forEach(btn => {
+                if (btn.getAttribute('data-note') === closestString.note && 
+                    Math.abs(parseFloat(btn.getAttribute('data-freq')) - closestString.freq) < 1) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        } else {
+            // Se não estiver próximo a nenhuma corda conhecida, apenas mostrar a nota
+            indicatorNeedle.style.left = '50%';
+            indicatorNeedle.style.backgroundColor = '#0a7ec2'; // Cor padrão
+            
+            // Usar debounce também para esta mensagem
+            const currentTime = Date.now();
+            const newStatusMessage = `Nota detectada: ${note.name}${note.octave}`;
+            
+            if (
+                newStatusMessage !== lastStatusMessage || 
+                currentTime - lastStatusUpdateTime > statusUpdateDelay
+            ) {
+                tuningStatus.textContent = newStatusMessage;
+                tuningStatus.style.color = '#666';
+                
+                lastStatusMessage = newStatusMessage;
+                lastStatusUpdateTime = currentTime;
+            }
+            
+            document.querySelectorAll('.string-btn').forEach(btn => btn.classList.remove('active'));
+        }
+    } else {
+        // Sem sinal claro
+        indicatorNeedle.style.left = '50%';
+        indicatorNeedle.style.backgroundColor = '#0a7ec2'; // Cor padrão
+        document.querySelectorAll('.string-btn').forEach(btn => btn.classList.remove('active'));
+        
+        // Usar debounce também para esta mensagem
+        const currentTime = Date.now();
+        const newStatusMessage = 'Aguardando sinal...';
+        
+        if (
+            newStatusMessage !== lastStatusMessage || 
+            currentTime - lastStatusUpdateTime > statusUpdateDelay
+        ) {
+            tuningStatus.textContent = newStatusMessage;
+            tuningStatus.style.color = '#666';
+            
+            lastStatusMessage = newStatusMessage;
+            lastStatusUpdateTime = currentTime;
+        }
+    }
+    
+    // Continuar o loop
+    if (isListening) {
+        animationFrame = requestAnimationFrame(updatePitch);
+    }
+}
+    
+    // Algoritmo de autocorrelação para detecção de pitch
+    function detectPitch(buffer, sampleRate) {
+        // Verificar se o sinal tem volume suficiente
+        let sum = 0;
+        for (let i = 0; i < buffer.length; i++) {
+            sum += buffer[i] * buffer[i];
+        }
+        const rms = Math.sqrt(sum / buffer.length);
+        
+        if (rms < 0.01) {
+            return null; // Sinal muito fraco
+        }
+        
+        // Autocorrelação
+        const correlations = new Float32Array(buffer.length / 2);
+        
+        for (let lag = 0; lag < correlations.length; lag++) {
+            let sum = 0;
+            for (let i = 0; i < correlations.length; i++) {
+                sum += buffer[i] * buffer[i + lag];
+            }
+            correlations[lag] = sum / correlations.length;
+        }
+        
+        // Encontrar picos na autocorrelação
+        const peakThreshold = 0.9;
+        let maxCorrelation = -1;
+        let maxLag = -1;
+        
+        // Ignorar as correlações iniciais (correspondentes a frequências muito altas)
+        const minLag = Math.floor(sampleRate / 2000); // ~2000Hz
+        
+        for (let lag = minLag; lag < correlations.length; lag++) {
+            if (correlations[lag] > peakThreshold * maxCorrelation && 
+                correlations[lag] > correlations[lag - 1] && 
+                correlations[lag] >= correlations[lag + 1]) {
+                maxCorrelation = correlations[lag];
+                maxLag = lag;
+                break;
+            }
+            
+            if (correlations[lag] > maxCorrelation) {
+                maxCorrelation = correlations[lag];
+            }
+        }
+        
+        // Converter o lag para frequência
+        if (maxLag > 0) {
+            const frequency = sampleRate / maxLag;
+            return frequency;
+        }
+        
+        return null;
+    }
+    
+    // Encontrar a corda mais próxima da frequência detectada
+    function findClosestString(freq, strings) {
+        let closestString = null;
+        let minDistance = Infinity;
+        
+        for (const string of strings) {
+            // Calcular distância em cents
+            const distance = Math.abs(1200 * Math.log2(freq / string.freq));
+            
+            if (distance < minDistance && distance < 100) { // Limitado a 100 cents (1 semitom)
+                minDistance = distance;
+                closestString = string;
+            }
+        }
+        
+        return closestString;
+    }
+    
+    // Inicializar os botões de cordas para o instrumento padrão
+    updateStringButtons();
+});
+</script>
