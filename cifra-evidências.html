@@ -738,6 +738,93 @@
     .chord-display{
         position: static;
     }
+    .chord-display {
+    width: 100%;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    position: static;
+    top: 100px;
+    z-index: 99;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.chord-diagram {
+    width: 90px;
+    height: 110px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.chord-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.chord-image {
+    width: 80px;
+    height: 80px;
+}
+
+/* Classe quando os acordes estão fixos */
+.chord-display.fixed {
+    position: fixed;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1170px;
+    width: calc(100% - 30px);
+    z-index: 99;
+}
+
+.chord-display-controls {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+    .chord-display {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Para melhor rolagem em dispositivos iOS */
+    scrollbar-width: thin; /* Para Firefox */
+    padding: 15px;
+    gap: 15px; /* Espaço consistente entre os itens */
+}
+
+.chord-display::-webkit-scrollbar {
+    height: 6px; /* Altura da barra de rolagem */
+}
+
+.chord-display::-webkit-scrollbar-thumb {
+    background-color: #888; /* Cor do "polegar" da barra de rolagem */
+    border-radius: 3px;
+}
+
+.chord-display::-webkit-scrollbar-track {
+    background-color: #f1f1f1; /* Cor da "trilha" da barra de rolagem */
+}
+
+.chord-diagram {
+    flex: 0 0 auto; /* Impede que os acordes encolham ou cresçam */
+    width: 90px;
+    margin-right: 0; /* Removemos essa margem e usamos gap no pai */
+}
+
+/* Ajuste para garantir que os controles fiquem na posição correta */
+.chord-display-controls {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    margin-top: 0;
+}
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -776,8 +863,8 @@
         <!-- Song Header -->
         <section class="song-header">
             <button class="favorite-btn">★</button>
-            <h1 id="musicTitle">Evidências</h1>
-            <h2>Chitãozinho & Xororó</h2>
+            <h1 id="musicTitle">Só o Começo</h1>
+            <h2 id="artista">Vocal Livre</h2>
             <div class="song-meta">
                 <span class="difficulty">Dificuldade: Fácil</span>
                 <span class="tuning">Afinação: Padrão</span>
@@ -792,7 +879,7 @@
                     <span>Tom:</span>
                     <button class="tone-btn">Bb</button>
                     <button class="tone-btn">B</button>
-                    <button class="tone-btn active">C</button>
+                    <button class="tone-btn">C</button>
                     <button class="tone-btn">C#</button>
                     <button class="tone-btn">D</button>
                     <button class="tone-btn">Eb</button>
@@ -813,9 +900,14 @@
                         <span>&#9658;</span> Iniciar rolagem
                     </button>
                     <div class="autoscroll-speed">
-                        <button class="speed-control" id="decrease-speed">-</button>
-                        <span id="speed-display">1x</span>
-                        <button class="speed-control" id="increase-speed">+</button>
+                       <!-- Botão de ouvir música -->
+<button id="playMusicBtn" style="margin-top: 10px;">Ouvir Música</button>
+
+<!-- Iframe oculto inicialmente -->
+<div id="musicIframeContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 300px; background-color: #000; z-index: 1000;">
+    <button id="closeIframeBtn" style="position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">X</button>
+    <iframe id="musicIframe" width="100%" height="100%" src="" frameborder="0" allowfullscreen></iframe>
+</div>
                     </div>
                     <button class="pdf-btn">📄 Download PDF</button>
                     <div class="share-btn-container">
@@ -833,58 +925,34 @@
         
         <!-- Chord Display -->
         <section class="chord-display" id="chord-display">
-            <div class="chord-diagram">
-                <div class="chord-name">C</div>
-                <div class="chord-grid">
-                    <div class="chord-dot" style="top: 50%; left: 16.67%;"></div>
-                    <div class="chord-dot" style="top: 30%; left: 50%;"></div>
-                    <div class="chord-dot" style="top: 10%; left: 83.33%;"></div>
-                </div>
-            </div>
-            <div class="chord-diagram">
-                <div class="chord-name">Am</div>
-                <div class="chord-grid">
-                    <div class="chord-dot" style="top: 30%; left: 50%;"></div>
-                    <div class="chord-dot" style="top: 10%; left: 16.67%;"></div>
-                </div>
-            </div>
-            <div class="chord-diagram">
-                <div class="chord-name">F</div>
-                <div class="chord-grid">
-                    <div class="chord-dot" style="top: 10%; left: 16.67%;"></div>
-                    <div class="chord-dot" style="top: 10%; left: 33.33%;"></div>
-                    <div class="chord-dot" style="top: 10%; left: 50%;"></div>
-                    <div class="chord-dot" style="top: 30%; left: 66.67%;"></div>
-                    <div class="chord-dot" style="top: 30%; left: 83.33%;"></div>
-                </div>
-            </div>
-            <div class="chord-diagram">
-                <div class="chord-name">G</div>
-                <div class="chord-grid">
-                    <div class="chord-dot" style="top: 70%; left: 16.67%;"></div>
-                    <div class="chord-dot" style="top: 50%; left: 50%;"></div>
-                    <div class="chord-dot" style="top: 30%; left: 83.33%;"></div>
-                </div>
-            </div>
-            <div class="chord-diagram">
-                <div class="chord-name">Em</div>
-                <div class="chord-grid">
-                    <div class="chord-dot" style="top: 50%; left: 16.67%;"></div>
-                    <div class="chord-dot" style="top: 50%; left: 33.33%;"></div>
-                </div>
-            </div>
-            <div class="chord-diagram">
-                <div class="chord-name">Dm</div>
-                <div class="chord-grid">
-                    <div class="chord-dot" style="top: 10%; left: 16.67%;"></div>
-                    <div class="chord-dot" style="top: 30%; left: 33.33%;"></div>
-                    <div class="chord-dot" style="top: 10%; left: 50%;"></div>
-                </div>
-            </div>
-            <div class="chord-display-controls">
-    <button id="pin-chords" class="pin-btn">📌 Fixar acordes</button>
-</div>
-        </section>
+    <div class="chord-diagram">
+        <div class="chord-name">C</div>
+        <img class="chord-image" src="https://ukutabs.com/chords/standard/C.svg" alt="Acorde C">
+    </div>
+    <div class="chord-diagram">
+        <div class="chord-name">Am</div>
+        <img class="chord-image" src="https://ukutabs.com/chords/standard/Am.svg" alt="Acorde Am">
+    </div>
+    <div class="chord-diagram">
+        <div class="chord-name">F</div>
+        <img class="chord-image" src="https://ukutabs.com/chords/standard/F.svg" alt="Acorde F">
+    </div>
+    <div class="chord-diagram">
+        <div class="chord-name">G</div>
+        <img class="chord-image" src="https://ukutabs.com/chords/standard/G.svg" alt="Acorde G">
+    </div>
+    <div class="chord-diagram">
+        <div class="chord-name">Em</div>
+        <img class="chord-image" src="https://ukutabs.com/chords/standard/Em.svg" alt="Acorde Em">
+    </div>
+    <div class="chord-diagram">
+        <div class="chord-name">Dm</div>
+        <img class="chord-image" src="https://ukutabs.com/chords/standard/Dm.svg" alt="Acorde Dm">
+    </div>
+    <div class="chord-display-controls">
+        <button id="pin-chords" class="pin-btn">📌 Fixar acordes</button>
+    </div>
+</section>
         
         <!-- Tabs Content -->
         <section class="tabs-section">
@@ -899,86 +967,201 @@
             </aside>
             
             <div class="tabs-content" id="chordText">
-<span class="comment">(Intro) </span><span class="chord">C Am F G</span>
+                <span class="chord">Dm</span>              <span class="chord">B</span>
+Eu aprendi qual é o valor
+           <span class="chord">F</span>
+De um sonho alcançar
 
-<span class="chord">C                  Am</span>
-Quando eu digo que deixei de te amar
-<span class="chord">F                     G</span>
-É porque eu te amo
+<span class="chord">Dm</span>            <span class="chord">B</span>
+Eu entendi que no caminho
+        <span class="chord">F</span>
+Pedras terá
 
-<span class="chord">C                  Am</span>
-Quando eu digo que não quero mais você
-<span class="chord">F                     G</span>
-É porque eu te quero
-
-<span class="chord">F                          G</span>
-Eu tenho medo de te dar meu coração
-<span class="chord">Em                    Am</span>
-E confessar que eu estou em tuas mãos
-
-<span class="chord">Dm                   G</span>
-Eu tenho medo de viver sem teu amor
-<span class="chord">                     C</span>
-Eu tenho medo de não saber te amar
-<span class="chord">                     Am</span>
-Tenho medo de te perder para sempre
-<span class="chord">F                          G</span>
-E muitas vezes, me desespero só de pensar
-
-<span class="comment">(Refrão)</span>
-<span class="chord">C            Am</span>
-Eu me afasto e me defendo de você
-<span class="chord">F                             G</span>
-Mas depois me entrego, me rendo, me derreto
-<span class="chord">C                  Am</span>
-Quando eu falo que eu te odeio e que acabou
-<span class="chord">F                           G</span>
-É porque te amo demais, meu amor
-
-<span class="comment">(Repete Intro) </span><span class="chord">C Am F G</span>
-
-<span class="chord">C                  Am</span>
-Quando eu digo que deixei de te amar
-<span class="chord">F                     G</span>
-É porque eu te amo
-
-<span class="chord">C                  Am</span>
-Quando eu digo que não quero mais você
-<span class="chord">F                     G</span>
-É porque eu te quero
-
-<span class="chord">F                          G</span>
-Eu tenho medo de te dar meu coração
-<span class="chord">Em                    Am</span>
-E confessar que eu estou em tuas mãos
-
-<span class="chord">Dm                   G</span>
-Eu tenho medo de viver sem teu amor
-<span class="chord">                     C</span>
-Eu tenho medo de não saber te amar
-<span class="chord">                     Am</span>
-Tenho medo de te perder para sempre
-<span class="chord">F                          G</span>
-E muitas vezes, me desespero só de pensar
-
-<span class="comment">(Refrão)</span>
-<span class="chord">C            Am</span>
-Eu me afasto e me defendo de você
-<span class="chord">F                             G</span>
-Mas depois me entrego, me rendo, me derreto
-<span class="chord">C                  Am</span>
-Quando eu falo que eu te odeio e que acabou
-<span class="chord">F                           G</span>
-É porque te amo, te amo demais, meu amor
-
-<span class="chord">C            Am</span>
-Eu me afasto e me defendo de você
-<span class="chord">F                             G</span>
-Mas depois me entrego, me rendo, me derreto
-<span class="chord">C                  Am</span>
-Quando eu falo que eu te odeio e que acabou
-<span class="chord">F                           G       C</span>
-É porque te amo demais, meu amor
+       <span class="chord">Dm</span>            <span class="chord">B</span>
+Eu vi em campo aberto se
+        <span class="chord">F</span>
+Erguer construção
+          
+                 <span class="chord">Dm</span>     <span class="chord">B</span>
+E foi com muitas pedras
+             <span class="chord">F</span>
+E foi com muitas mãos
+          
+      <span class="chord">Dm</span>           <span class="chord">B</span>
+Eu vi o meu limite vir
+        <span class="chord">F</span>
+Diante de mim
+          
+      <span class="chord">Dm</span>            <span class="chord">B</span>
+Eu enfrentei batalhas que
+        <span class="chord">F</span>
+Eu não venci
+          
+     <span class="chord">Dm</span>            <span class="chord">B</span>
+Mas o troféu não é de quem
+        <span class="chord">F</span>
+Não fracassou
+          
+              <span class="chord">Dm</span>    <span class="chord">B</span>
+Eu tive muitas quedas
+             <span class="chord">F</span>
+Mas não fiquei no chão
+          
+<span class="chord">B</span>                  <span class="chord">F</span>
+E ao olhar pra trás
+             <span class="chord">Dm</span>
+Tudo que passou
+          
+        <span class="chord">C</span>
+Venho agradecer
+               <span class="chord">B</span>
+Quem comigo estava
+          
+            <span class="chord">F</span>
+Ergo minhas mãos
+             <span class="chord">C</span>
+Pra reconhecer
+          
+          <span class="chord">B</span>
+Que hoje eu sou
+            <span class="chord">F</span>
+Quem eu sou
+          
+         <span class="chord">C</span>
+Pois sua mão
+             <span class="chord">Dm</span>
+Me acompanhava
+          
+       <span class="chord">B</span>            <span class="chord">F</span>
+Mas eu sei, não é o fim
+        <span class="chord">C</span>             <span class="chord">Dm</span>
+É só o começo da jornada
+          
+             <span class="chord">B</span>
+Eu abro o meu coração
+       
+Pra minha nova história
+          
+<span class="chord">F</span>  <span class="chord">B</span>  <span class="chord">Dm</span>  <span class="chord">C</span>  <span class="chord">F</span>  <span class="chord">B</span>  <span class="chord">Dm</span>  <span class="chord">C</span>
+(oooh, oooh, oooooooooh)(x2)
+          
+     <span class="chord">Dm</span>            <span class="chord">B</span>
+Vejo vitórias se hoje eu
+        <span class="chord">F</span>
+Olho pra trás
+          
+         <span class="chord">Dm</span>            <span class="chord">B</span>
+E a minha frente eu sei
+             <span class="chord">F</span>
+Existem muito mais
+          
+     <span class="chord">Dm</span>            <span class="chord">B</span>
+Eu sei que minha jornada aqui
+        <span class="chord">F</span>
+Só começou
+          
+                 <span class="chord">Dm</span>     <span class="chord">B</span>
+E ao longo dessa estrada
+        <span class="chord">F</span>
+Sozinho não estou
+          
+<span class="chord">B</span>                  <span class="chord">F</span>
+E ao olhar pra trás
+             <span class="chord">Dm</span>
+Tudo que passou
+          
+        <span class="chord">C</span>
+Venho agradecer
+               <span class="chord">B</span>
+Quem comigo estava
+          
+            <span class="chord">F</span>
+Ergo minhas mãos
+             <span class="chord">C</span>
+Pra reconhecer
+          
+          <span class="chord">B</span>
+Que hoje eu sou
+            <span class="chord">F</span>
+Quem eu sou
+          
+         <span class="chord">C</span>
+Pois sua mão
+             <span class="chord">Dm</span>
+Me acompanhava
+          
+       <span class="chord">B</span>            <span class="chord">F</span>
+Mas eu sei, não é o fim
+        <span class="chord">C</span>             <span class="chord">Dm</span>
+É só o começo da jornada
+          
+             <span class="chord">B</span>
+Eu abro o meu coração
+       
+Pra minha nova história
+          
+<span class="chord">Eb</span>  <span class="chord">B</span>  <span class="chord">F</span>  <span class="chord">Eb</span>  <span class="chord">B</span>  <span class="chord">F</span>  <span class="chord">C</span>
+(ooooh, ooooh)(x2)
+          
+<span class="chord">B</span>                  <span class="chord">F</span>
+E ao olhar pra trás
+             <span class="chord">Dm</span>
+Tudo que passou
+          
+        <span class="chord">C</span>
+Venho agradecer
+               <span class="chord">B</span>
+Quem comigo estava
+          
+            <span class="chord">F</span>
+Ergo minhas mãos
+             <span class="chord">C</span>
+Pra reconhecer
+          
+          <span class="chord">B</span>
+Que hoje eu sou
+            <span class="chord">F</span>
+Quem eu sou
+          
+         <span class="chord">C</span>
+Pois sua mão
+             <span class="chord">Dm</span>
+Me acompanhava
+          
+       <span class="chord">B</span>            <span class="chord">F</span>
+Mas eu sei, não é o fim
+        <span class="chord">C</span>             <span class="chord">Dm</span>
+É só o começo da jornada
+          
+             <span class="chord">B</span>
+Eu abro o meu coração
+(Pra minha nova história)
+          
+<span class="chord">B</span>
+Que hoje eu sou
+            <span class="chord">F</span>
+Quem eu sou
+          
+         <span class="chord">C</span>
+Pois sua mão
+             <span class="chord">Dm</span>
+Me acompanhava
+          
+       <span class="chord">B</span>            <span class="chord">F</span>
+Mas eu sei, não é o fim
+        <span class="chord">C</span>             <span class="chord">Dm</span>
+É só o começo da jornada
+          
+             <span class="chord">B</span>
+Eu abro o meu coração
+          
+Eu abro o meu coração
+          
+<span class="chord">F</span>  <span class="chord">B</span>  <span class="chord">Dm</span>  <span class="chord">C</span>  <span class="chord">F</span>  <span class="chord">B</span>  <span class="chord">Dm</span>  <span class="chord">C</span>
+(oooh, oooh, oooooooooh)(x2)
+          
+        <span class="chord">Eb</span>  <span class="chord">B</span>  <span class="chord">F</span>
+Nova história
             </div>
         </section>
         
@@ -1100,6 +1283,27 @@ const tabsContent = document.querySelector('.tabs-content');
 const musicTitle = document.getElementById('musicTitle');
 const chordText = document.getElementById('chordText');
 
+// Botão de ouvir música
+const playMusicBtn = document.getElementById('playMusicBtn');
+    const musicIframeContainer = document.getElementById('musicIframeContainer');
+    const musicIframe = document.getElementById('musicIframe');
+    const closeIframeBtn = document.getElementById('closeIframeBtn');
+
+    // URL do vídeo do YouTube
+    const youtubeVideoUrl = "https://www.youtube.com/embed/VIDEO_ID"; // Substitua VIDEO_ID pelo ID do vídeo
+
+    // Abrir iframe ao clicar no botão
+    playMusicBtn.addEventListener('click', () => {
+        musicIframe.src = youtubeVideoUrl;
+        musicIframeContainer.style.display = 'block';
+    });
+
+    // Fechar iframe ao clicar no botão de fechar
+    closeIframeBtn.addEventListener('click', () => {
+        musicIframe.src = ""; // Limpa o src do iframe
+        musicIframeContainer.style.display = 'none';
+    });
+    
 // FunÃ§Ã£o para alternar rolagem automÃ¡tica
 function toggleAutoscroll() {
     autoscrollActive = !autoscrollActive;
@@ -1200,14 +1404,183 @@ function updateChordInContent(oldChord, newChord) {
     });
 }
 
-const chordMap = {
-    'C': { 'Bb': 'Bb', 'B': 'B', 'C': 'C', 'C#': 'C#', 'D': 'D', 'Eb': 'Eb' },
-    'Am': { 'Bb': 'Gm', 'B': 'G#m', 'C': 'Am', 'C#': 'A#m', 'D': 'Bm', 'Eb': 'Cm' },
-    'F': { 'Bb': 'Eb', 'B': 'E', 'C': 'F', 'C#': 'F#', 'D': 'G', 'Eb': 'G#' },
-    'G': { 'Bb': 'F', 'B': 'F#', 'C': 'G', 'C#': 'G#', 'D': 'A', 'Eb': 'Bb' },
-    'Em': { 'Bb': 'Dm', 'B': 'D#m', 'C': 'Em', 'C#': 'Fm', 'D': 'F#m', 'Eb': 'Gm' },
-    'Dm': { 'Bb': 'Cm', 'B': 'C#m', 'C': 'Dm', 'C#': 'D#m', 'D': 'Em', 'Eb': 'Fm' }
+// Mapeamento completo de acordes para todos os tons
+const fullChordMap = {
+    // Acordes principais da música
+    'C': { 'A': 'A', 'Bb': 'Bb', 'B': 'B', 'C': 'C', 'Db': 'Db', 'D': 'D', 'Eb': 'Eb', 'E': 'E', 'F': 'F', 'F#': 'F#', 'G': 'G', 'Ab': 'Ab' },
+    'Am': { 'A': 'F#m', 'Bb': 'Gm', 'B': 'G#m', 'C': 'Am', 'Db': 'Bbm', 'D': 'Bm', 'Eb': 'Cm', 'E': 'C#m', 'F': 'Dm', 'F#': 'D#m', 'G': 'Em', 'Ab': 'Fm' },
+    'F': { 'A': 'D', 'Bb': 'Eb', 'B': 'E', 'C': 'F', 'Db': 'Gb', 'D': 'G', 'Eb': 'Ab', 'E': 'A', 'F': 'Bb', 'F#': 'B', 'G': 'C', 'Ab': 'Db' },
+    'G': { 'A': 'E', 'Bb': 'F', 'B': 'F#', 'C': 'G', 'Db': 'Ab', 'D': 'A', 'Eb': 'Bb', 'E': 'B', 'F': 'C', 'F#': 'C#', 'G': 'D', 'Ab': 'Eb' },
+    'Em': { 'A': 'C#m', 'Bb': 'Dm', 'B': 'D#m', 'C': 'Em', 'Db': 'Fm', 'D': 'F#m', 'Eb': 'Gm', 'E': 'G#m', 'F': 'Am', 'F#': 'A#m', 'G': 'Bm', 'Ab': 'Cm' },
+    'Dm': { 'A': 'Bm', 'Bb': 'Cm', 'B': 'C#m', 'C': 'Dm', 'Db': 'Ebm', 'D': 'Em', 'Eb': 'Fm', 'E': 'F#m', 'F': 'Gm', 'F#': 'G#m', 'G': 'Am', 'Ab': 'Bbm' }
 };
+
+// Função para detectar o tom da música
+function detectSongKey() {
+    const chordText = document.getElementById('chordText').textContent;
+    
+    // Padrões comuns para reconhecer o tom (baseado na progressão harmônica)
+    const patterns = {
+        'C': [/C.*Am.*F.*G/i, /C.*G.*Am.*F/i, /C.*F.*G/i],
+        'A': [/A.*F#m.*D.*E/i, /A.*E.*F#m.*D/i, /A.*D.*E/i],
+        'Bb': [/Bb.*Gm.*Eb.*F/i, /Bb.*F.*Gm.*Eb/i, /Bb.*Eb.*F/i],
+        'B': [/B.*G#m.*E.*F#/i, /B.*F#.*G#m.*E/i, /B.*E.*F#/i],
+        'Db': [/Db.*Bbm.*Gb.*Ab/i, /Db.*Ab.*Bbm.*Gb/i, /Db.*Gb.*Ab/i],
+        'D': [/D.*Bm.*G.*A/i, /D.*A.*Bm.*G/i, /D.*G.*A/i],
+        'Eb': [/Eb.*Cm.*Ab.*Bb/i, /Eb.*Bb.*Cm.*Ab/i, /Eb.*Ab.*Bb/i],
+        'E': [/E.*C#m.*A.*B/i, /E.*B.*C#m.*A/i, /E.*A.*B/i],
+        'F': [/F.*Dm.*Bb.*C/i, /F.*C.*Dm.*Bb/i, /F.*Bb.*C/i],
+        'F#': [/F#.*D#m.*B.*C#/i, /F#.*C#.*D#m.*B/i, /F#.*B.*C#/i],
+        'G': [/G.*Em.*C.*D/i, /G.*D.*Em.*C/i, /G.*C.*D/i],
+        'Ab': [/Ab.*Fm.*Db.*Eb/i, /Ab.*Eb.*Fm.*Db/i, /Ab.*Db.*Eb/i]
+    };
+    
+    // Contar ocorrências de cada acorde
+    const chordCounts = {};
+    const chordRegex = /\b([A-G][b#]?m?7?)\b/g;
+    let match;
+    
+    while ((match = chordRegex.exec(chordText)) !== null) {
+        const chord = match[1];
+        chordCounts[chord] = (chordCounts[chord] || 0) + 1;
+    }
+    
+    // Checar padrões comuns de progressão
+    for (const [key, patternList] of Object.entries(patterns)) {
+        for (const pattern of patternList) {
+            if (pattern.test(chordText)) {
+                return key;
+            }
+        }
+    }
+    
+    // Se não encontrou por padrões, analisa pelos acordes mais frequentes
+    // e sua relação com o tom
+    
+    // Como não encontramos por padrão, vamos verificar o primeiro acorde e o último
+    const firstChordMatch = chordText.match(/\b([A-G][b#]?m?)\b/);
+    const lastChordMatch = chordText.match(/([A-G][b#]?m?)\s*$/);
+    
+    // Músicas frequentemente começam e terminam no acorde do tom
+    if (firstChordMatch && lastChordMatch) {
+        const firstChord = firstChordMatch[1];
+        const lastChord = lastChordMatch[1];
+        
+        // Se começa e termina com mesmo acorde, provavelmente é o tom
+        if (firstChord === lastChord && !firstChord.includes('m')) {
+            return firstChord.replace(/7$/, ''); // Remover 7 se existir
+        }
+        
+        // Se termina com relativo menor
+        const majorKeys = {
+            'Am': 'C', 'Bbm': 'Db', 'Bm': 'D',
+            'Cm': 'Eb', 'C#m': 'E', 'Dm': 'F',
+            'D#m': 'F#', 'Em': 'G', 'Fm': 'Ab',
+            'F#m': 'A', 'Gm': 'Bb', 'G#m': 'B'
+        };
+        
+        if (lastChord.includes('m') && majorKeys[lastChord]) {
+            return majorKeys[lastChord];
+        }
+    }
+    
+    // Verificação baseada no acorde mais comum
+    let mostCommonChord = '';
+    let highestCount = 0;
+    
+    for (const [chord, count] of Object.entries(chordCounts)) {
+        if (count > highestCount && !chord.includes('7')) {
+            mostCommonChord = chord;
+            highestCount = count;
+        }
+    }
+    
+    // Se o acorde mais comum é um acorde maior, provavelmente é o tom
+    if (mostCommonChord && !mostCommonChord.includes('m')) {
+        return mostCommonChord;
+    }
+    
+    // Se tudo falhar, assume C (tom original da música)
+    return 'C';
+}
+
+// Função para atualizar a interface com os botões de tom
+function setupToneButtons() {
+    // Todos os tons disponíveis
+    const allTones = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab'];
+    
+    // Detectar o tom da música
+    const detectedKey = detectSongKey();
+    
+    // Referência ao container de botões de tom
+    const toolGroup = document.querySelector('.tools-container .tool-group:first-child');
+    
+    // Limpar botões existentes (mantendo apenas o texto "Tom:")
+    while (toolGroup.childNodes.length > 1) {
+        toolGroup.removeChild(toolGroup.lastChild);
+    }
+    
+    // Adicionar os novos botões
+    allTones.forEach(tone => {
+        const button = document.createElement('button');
+        button.className = 'tone-btn';
+        button.textContent = tone;
+        
+        // Marcar o botão de tom detectado como ativo
+        if (tone === detectedKey) {
+            button.classList.add('active');
+            
+            // Atualizar a informação do tom original
+            const toneInfo = document.querySelector('.tone-info');
+            toneInfo.textContent = `Tom original: ${detectedKey} | Tom atual: ${detectedKey}`;
+        }
+        
+        toolGroup.appendChild(button);
+    });
+    
+    // Reaplica os event listeners nos novos botões
+    document.querySelectorAll('.tone-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            if (btn.classList.contains('active')) return;
+            
+            const currentTone = document.querySelector('.tone-btn.active').textContent;
+            const newTone = btn.textContent;
+            
+            document.querySelectorAll('.tone-btn').forEach((toneBtn) => toneBtn.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Atualizar a informação do tom atual
+            const toneInfo = document.querySelector('.tone-info');
+            toneInfo.textContent = toneInfo.textContent.replace(/Tom atual: [A-G]#?b?/, `Tom atual: ${newTone}`);
+            
+            // Atualizar acordes na cifra usando o mapeamento completo
+            Object.keys(fullChordMap).forEach(originalChord => {
+                updateChordInContent(fullChordMap[originalChord][currentTone], fullChordMap[originalChord][newTone]);
+            });
+            
+            // Atualizar os diagramas de acordes
+            updateChordDiagrams(newTone);
+        });
+    });
+}
+
+// Substitua o mapeamento de acordes existente pelo novo mapeamento completo
+// Adicione essa linha ao início do script ou antes da primeira referência a chordMap
+window.addEventListener('DOMContentLoaded', () => {
+    // Atualiza os valores iniciais
+    updateSpeedDisplay();
+    
+    // Inicializa as posições para verificação da área da cifra
+    const tabsContentRect = tabsContent.getBoundingClientRect();
+    tabsContentTop = tabsContentRect.top + window.scrollY;
+    tabsContentBottom = tabsContentRect.bottom + window.scrollY;
+    
+    // Verifica se já está na área da cifra ao carregar
+    checkIfInChordArea();
+    
+    // Configura os botões de tom e detecta o tom da música
+    setupToneButtons();
+});
 
 // BotÃµes de tom
 toneButtons.forEach((btn) => {
@@ -1375,13 +1748,42 @@ async function downloadPDF() {
 
     const title = document.getElementById("musicTitle").innerText;
     const chordText = document.getElementById("chordText").innerText;
-    const logoUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Logo_2013_Google.png/320px-Logo_2013_Google.png";
+    const logoUrl = "https://i.postimg.cc/hjXfhHyQ/logopdf.png"; // Logo normal
+    const watermarkUrl = "https://i.postimg.cc/6pCSxqBy/Pietro-Cifras.png"; // Logo da marca d'água
 
     const logoImg = new Image();
+    const watermarkImg = new Image();
+    
     logoImg.crossOrigin = "Anonymous";
+    watermarkImg.crossOrigin = "Anonymous";
     logoImg.src = logoUrl;
+    watermarkImg.src = watermarkUrl;
 
-    logoImg.onload = () => {
+    // Aguardar o carregamento das imagens antes de continuar
+    const loadImages = () => {
+        return new Promise((resolve, reject) => {
+            let loaded = 0;
+            const total = 2;
+
+            const checkLoaded = () => {
+                loaded++;
+                if (loaded === total) {
+                    resolve();
+                }
+            };
+
+            logoImg.onload = checkLoaded;
+            watermarkImg.onload = checkLoaded;
+
+            logoImg.onerror = () => reject("Erro ao carregar a logo.");
+            watermarkImg.onerror = () => reject("Erro ao carregar a marca d'água.");
+        });
+    };
+
+    try {
+        // Espera as imagens carregarem
+        await loadImages();
+
         const marginLeft = 15;
         const marginTop = 40;
         const maxWidth = 180;
@@ -1390,6 +1792,7 @@ async function downloadPDF() {
         const pageWidth = doc.internal.pageSize.width;
         let y = marginTop;
 
+        // Função para adicionar rodapé em cada página
         const addFooter = () => {
             const footerText = "Feito por: Pietro Nunes";
             const textWidth = doc.getTextWidth(footerText);
@@ -1398,11 +1801,40 @@ async function downloadPDF() {
             doc.text(footerText, pageWidth - textWidth - 10, pageHeight - 10);
         };
 
+        // Função para adicionar marca d'água com opacidade
+        const addWatermark = () => {
+            const imgWidth = Math.min(watermarkImg.width, pageWidth - 40);  // Limita o tamanho da logo
+            const imgHeight = (watermarkImg.height / watermarkImg.width) * imgWidth;  // Mantém a proporção
+
+            // Criando um canvas para manipular a opacidade
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = watermarkImg.width;
+            canvas.height = watermarkImg.height;
+
+            // Desenhando a imagem no canvas
+            ctx.drawImage(watermarkImg, 0, 0);
+
+            // Ajustando a opacidade para 10%
+            ctx.globalAlpha = 0.1; // 10% de opacidade
+            ctx.drawImage(watermarkImg, 0, 0);
+
+            // Convertendo o canvas para imagem
+            const watermarkCanvasImg = canvas.toDataURL('image/png');
+
+            // Adicionando a imagem da marca d'água com opacidade
+            doc.addImage(watermarkCanvasImg, 'PNG', (pageWidth - imgWidth) / 2, (pageHeight - imgHeight) / 2, imgWidth, imgHeight);
+        };
+
+        // Adiciona título e logo na primeira página
         doc.setFont("helvetica", "bold");
         doc.setFontSize(16);
         doc.text(title, marginLeft, 20);
         doc.addImage(logoImg, 'PNG', 160, 10, 40, 15);
-        addFooter();
+        addFooter(); // rodapé da primeira página
+
+        // Adiciona a marca d'água na primeira página
+        addWatermark();
 
         doc.setFont("courier", "normal");
         doc.setFontSize(12);
@@ -1412,25 +1844,34 @@ async function downloadPDF() {
             if (y + lineHeight > pageHeight - 20) {
                 doc.addPage();
                 y = marginTop;
+
+                // Cabeçalho e logo em nova página
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(16);
                 doc.text(title, marginLeft, 20);
                 doc.addImage(logoImg, 'PNG', 160, 10, 40, 15);
-                addFooter();
+                addFooter(); // rodapé da nova página
+
+                // Adiciona a marca d'água em nova página
+                addWatermark();
+
                 doc.setFont("courier", "normal");
                 doc.setFontSize(12);
             }
+
             doc.text(line, marginLeft, y);
             y += lineHeight;
         });
 
+        // Salvar o PDF com o nome do título
         doc.save(`${title}.pdf`);
-    };
 
-    logoImg.onerror = () => {
-        alert("Erro ao carregar a logo. Verifique a URL da imagem.");
-    };
+    } catch (error) {
+        alert(error);  // Exibe erro caso não consiga carregar as imagens
+    }
 }
+
+
 
 // BotÃ£o de compartilhamento
 shareBtn.addEventListener('click', () => {
@@ -1560,17 +2001,310 @@ document.querySelectorAll('.chord-diagram').forEach((diagram) => {
     });
 });
 
-// InicializaÃ§Ã£o
+// CSS para tornar os botões de tom responsivos
+const responsiveStyles = `
+/* Estilos para o container de botões de tom */
+.tone-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 5px;
+}
+
+/* Estilos para o dropdown de tons em dispositivos móveis */
+.tone-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.tone-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 100;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.tone-dropdown-content button {
+    padding: 8px 12px;
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.tone-dropdown-content button:hover {
+    background-color: #f1f1f1;
+}
+
+.tone-dropdown-content button.active {
+    background-color: #f8f8f8;
+    font-weight: bold;
+}
+
+.tone-dropdown-toggle {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.tone-dropdown-toggle:after {
+    content: "▼";
+    margin-left: 5px;
+    font-size: 10px;
+}
+
+/* Botões de tom para telas maiores */
+@media (min-width: 768px) {
+    .tone-dropdown {
+        display: none;
+    }
+    .tone-buttons-container {
+        display: flex;
+    }
+}
+
+/* Dropdown para telas menores */
+@media (max-width: 767px) {
+    .tone-dropdown {
+        display: block;
+    }
+    .tone-buttons-container {
+        display: none;
+    }
+}
+`;
+
+// Função para adicionar estilos CSS à página
+function addStyles() {
+    const styleElement = document.createElement('style');
+    styleElement.textContent = responsiveStyles;
+    document.head.appendChild(styleElement);
+}
+
+// Função atualizada para criar botões de tom responsivos
+function setupToneButtons() {
+    // Todos os tons disponíveis
+    const allTones = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab'];
+    
+    // Detectar o tom da música
+    const detectedKey = detectSongKey();
+    
+    // Referência ao container de botões de tom
+    const toolGroup = document.querySelector('.tools-container .tool-group:first-child');
+    
+    // Limpar botões existentes (mantendo apenas o texto "Tom:")
+    while (toolGroup.childNodes.length > 1) {
+        toolGroup.removeChild(toolGroup.lastChild);
+    }
+    
+    // Criar container para botões de desktop
+    const toneButtonsContainer = document.createElement('div');
+    toneButtonsContainer.className = 'tone-buttons-container';
+    toolGroup.appendChild(toneButtonsContainer);
+    
+    // Criar dropdown para mobile
+    const toneDropdown = document.createElement('div');
+    toneDropdown.className = 'tone-dropdown';
+    
+    const dropdownToggle = document.createElement('div');
+    dropdownToggle.className = 'tone-dropdown-toggle';
+    dropdownToggle.textContent = `Tom: ${detectedKey}`;
+    toneDropdown.appendChild(dropdownToggle);
+    
+    const dropdownContent = document.createElement('div');
+    dropdownContent.className = 'tone-dropdown-content';
+    toneDropdown.appendChild(dropdownContent);
+    
+    toolGroup.appendChild(toneDropdown);
+    
+    // Adicionar os botões para desktop e dropdown
+    allTones.forEach(tone => {
+        // Criar botão para versão desktop
+        const button = document.createElement('button');
+        button.className = 'tone-btn';
+        button.textContent = tone;
+        
+        // Criar botão para dropdown mobile
+        const dropdownButton = document.createElement('button');
+        dropdownButton.className = 'tone-dropdown-item';
+        dropdownButton.textContent = tone;
+        
+        // Marcar o botão de tom detectado como ativo
+        if (tone === detectedKey) {
+            button.classList.add('active');
+            dropdownButton.classList.add('active');
+            
+            // Atualizar a informação do tom original
+            const toneInfo = document.querySelector('.tone-info');
+            if (toneInfo) {
+                toneInfo.textContent = `Tom original: ${detectedKey} | Tom atual: ${detectedKey}`;
+            }
+        }
+        
+        toneButtonsContainer.appendChild(button);
+        dropdownContent.appendChild(dropdownButton);
+    });
+    
+    // Toggle para dropdown mobile
+    dropdownToggle.addEventListener('click', () => {
+        if (dropdownContent.style.display === 'block') {
+            dropdownContent.style.display = 'none';
+        } else {
+            dropdownContent.style.display = 'block';
+        }
+    });
+    
+    // Fechar dropdown ao clicar fora
+    document.addEventListener('click', (event) => {
+        if (!toneDropdown.contains(event.target)) {
+            dropdownContent.style.display = 'none';
+        }
+    });
+    
+    // Reaplica os event listeners nos botões desktop
+    document.querySelectorAll('.tone-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            handleToneChange(btn.textContent);
+        });
+    });
+    
+    // Aplica event listeners nos botões do dropdown
+    document.querySelectorAll('.tone-dropdown-item').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            handleToneChange(btn.textContent);
+            dropdownContent.style.display = 'none';
+            dropdownToggle.textContent = `Tom: ${btn.textContent}`;
+        });
+    });
+}
+
+// Função para lidar com a mudança de tom
+function handleToneChange(newTone) {
+    const currentToneBtn = document.querySelector('.tone-btn.active');
+    if (!currentToneBtn || currentToneBtn.textContent === newTone) return;
+    
+    const currentTone = currentToneBtn.textContent;
+    
+    // Atualizar botões ativos de desktop
+    document.querySelectorAll('.tone-btn').forEach((toneBtn) => {
+        toneBtn.classList.remove('active');
+        if (toneBtn.textContent === newTone) {
+            toneBtn.classList.add('active');
+        }
+    });
+    
+    // Atualizar botões ativos do dropdown
+    document.querySelectorAll('.tone-dropdown-item').forEach((toneBtn) => {
+        toneBtn.classList.remove('active');
+        if (toneBtn.textContent === newTone) {
+            toneBtn.classList.add('active');
+        }
+    });
+    
+    // Atualizar a informação do tom atual
+    const toneInfo = document.querySelector('.tone-info');
+    if (toneInfo) {
+        toneInfo.textContent = toneInfo.textContent.replace(/Tom atual: [A-G]#?b?/, `Tom atual: ${newTone}`);
+    }
+    
+    // Atualizar acordes na cifra usando o mapeamento completo
+    Object.keys(fullChordMap).forEach(originalChord => {
+        updateChordInContent(fullChordMap[originalChord][currentTone], fullChordMap[originalChord][newTone]);
+    });
+    
+    // Atualizar os diagramas de acordes
+    updateChordDiagrams(newTone);
+}
+
+// Adicione isso ao evento DOMContentLoaded para inicializar tudo
 window.addEventListener('DOMContentLoaded', () => {
-    // Atualiza os valores iniciais
+    // Adicionar estilos CSS responsivos
+    addStyles();
+    
+    // Inicializa valores originais
     updateSpeedDisplay();
     
-    // Inicializa as posiÃ§Ãµes para verificaÃ§Ã£o da Ã¡rea da cifra
+    // Inicializa as posições para verificação da área da cifra
     const tabsContentRect = tabsContent.getBoundingClientRect();
     tabsContentTop = tabsContentRect.top + window.scrollY;
     tabsContentBottom = tabsContentRect.bottom + window.scrollY;
     
-    // Verifica se jÃ¡ estÃ¡ na Ã¡rea da cifra ao carregar
+    // Verifica se já está na área da cifra ao carregar
     checkIfInChordArea();
+    
+    // Configura os botões de tom responsivos e detecta o tom da música
+    setupToneButtons();
 });
+    // Função para extrair os acordes da música
+    function extractChords() {
+        const chordSpans = document.querySelectorAll('.chord');
+        const chords = new Set();
+        
+        chordSpans.forEach(span => {
+            const chordText = span.textContent.trim();
+            // Dividir por espaços para pegar acordes individuais
+            chordText.split(/\s+/).forEach(chord => {
+                // Remover qualquer texto que não seja parte do acorde
+                const cleanChord = chord.replace(/[^A-Ga-g#b0-9maj7dim]/g, '');
+                if (cleanChord) chords.add(cleanChord);
+            });
+        });
+        
+        return Array.from(chords);
+    }
+
+    // Função para atualizar o display de acordes
+    function updateChordDisplay() {
+        const chords = extractChords();
+        const chordDisplay = document.getElementById('chord-display');
+        
+        // Limpar display atual (exceto controles)
+        const controls = chordDisplay.querySelector('.chord-display-controls');
+        chordDisplay.innerHTML = '';
+        
+        // Adicionar cada acorde como uma imagem
+        chords.forEach(chord => {
+            const chordDiv = document.createElement('div');
+            chordDiv.className = 'chord-diagram';
+            
+            const nameDiv = document.createElement('div');
+            nameDiv.className = 'chord-name';
+            nameDiv.textContent = chord;
+            
+            const img = document.createElement('img');
+            img.className = 'chord-image';
+            img.src = `https://ukutabs.com/chords/standard/${chord}.svg`;
+            img.alt = `Acorde ${chord}`;
+            
+            chordDiv.appendChild(nameDiv);
+            chordDiv.appendChild(img);
+            chordDisplay.appendChild(chordDiv);
+        });
+        
+        // Readicionar controles
+        chordDisplay.appendChild(controls);
+    }
+
+    // Evento para fixar/desafixar acordes
+    document.getElementById('pin-chords').addEventListener('click', function() {
+        const chordDisplay = document.getElementById('chord-display');
+        chordDisplay.classList.toggle('fixed');
+        this.textContent = chordDisplay.classList.contains('fixed') 
+            ? '📌 Desafixar acordes' 
+            : '📌 Fixar acordes';
+    });
+
+    // Inicializar o display de acordes quando a página carregar
+    document.addEventListener('DOMContentLoaded', updateChordDisplay);
     </script>
