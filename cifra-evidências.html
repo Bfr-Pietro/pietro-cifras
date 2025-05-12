@@ -900,14 +900,9 @@
                         <span>&#9658;</span> Iniciar rolagem
                     </button>
                     <div class="autoscroll-speed">
-                       <!-- Botão de ouvir música -->
-<button id="playMusicBtn" style="margin-top: 10px;">Ouvir Música</button>
-
-<!-- Iframe oculto inicialmente -->
-<div id="musicIframeContainer" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 300px; background-color: #000; z-index: 1000;">
-    <button id="closeIframeBtn" style="position: absolute; top: 10px; right: 10px; background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">X</button>
-    <iframe id="musicIframe" width="100%" height="100%" src="" frameborder="0" allowfullscreen></iframe>
-</div>
+                        <button class="speed-control" id="decrease-speed">-</button>
+                        <span id="speed-display">1x</span>
+                        <button class="speed-control" id="increase-speed">+</button>
                     </div>
                     <button class="pdf-btn">📄 Download PDF</button>
                     <div class="share-btn-container">
@@ -1283,27 +1278,6 @@ const tabsContent = document.querySelector('.tabs-content');
 const musicTitle = document.getElementById('musicTitle');
 const chordText = document.getElementById('chordText');
 
-// Botão de ouvir música
-const playMusicBtn = document.getElementById('playMusicBtn');
-    const musicIframeContainer = document.getElementById('musicIframeContainer');
-    const musicIframe = document.getElementById('musicIframe');
-    const closeIframeBtn = document.getElementById('closeIframeBtn');
-
-    // URL do vídeo do YouTube
-    const youtubeVideoUrl = "https://www.youtube.com/embed/VIDEO_ID"; // Substitua VIDEO_ID pelo ID do vídeo
-
-    // Abrir iframe ao clicar no botão
-    playMusicBtn.addEventListener('click', () => {
-        musicIframe.src = youtubeVideoUrl;
-        musicIframeContainer.style.display = 'block';
-    });
-
-    // Fechar iframe ao clicar no botão de fechar
-    closeIframeBtn.addEventListener('click', () => {
-        musicIframe.src = ""; // Limpa o src do iframe
-        musicIframeContainer.style.display = 'none';
-    });
-    
 // FunÃ§Ã£o para alternar rolagem automÃ¡tica
 function toggleAutoscroll() {
     autoscrollActive = !autoscrollActive;
